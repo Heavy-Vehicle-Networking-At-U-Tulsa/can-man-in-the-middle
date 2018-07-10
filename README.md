@@ -139,6 +139,23 @@ Log into the beaglbone and run `candump any` to see a stream of CAN traffic. Bot
 
 Try `cangen can0` to see the green led ficker. Try `cangen can1` to see the red led flicker. 
 
+### Using CAN Utils as a bridge
+`candump -s 2 -B can0 can1&`
+`candump -s 2 -B can1 can0&`
+will bridge the two networks.
+`top -c`
+shows
+```
+top - 12:36:49 up 11 min,  1 user,  load average: 0.09, 0.17, 0.13 Tasks:  77 total,   1 running,  76 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  5.4 us, 13.1 sy,  0.0 ni, 76.2 id,  0.0 wa,  0.0 hi,  5.4 si,  0.0 st
+KiB Mem:    508524 total,    64504 used,   444020 free,     6712 buffers
+KiB Swap:        0 total,        0 used,        0 free.    25868 cached Mem
+
+  PID USER      PR  NI    VIRT    RES    SHR S %CPU %MEM     TIME+ COMMAND
+ 1159 ubuntu    20   0    1164    344    288 S  8.9  0.1   0:04.78 candump -s 2 -B can1 can0
+ 1156 ubuntu    20   0    1164    344    288 S  7.0  0.1   0:10.79 candump -s 2 -B can0 can1
+ ```
+
 ## Writing Programs
 
 The image comes with Python 3.5
@@ -149,5 +166,11 @@ pip3 install python-can
 ```
 
 Make something cool in Python!
+
+### Remote Sublime
+
+To edit files using Sublime in on the Beaglebone, there is a package in Sublime Text 3 called RemoteSubl. https://github.com/randy3k/RemoteSubl
+
+http://blog.keyrus.co.uk/editing_files_on_a_remote_server_using_sublime.html
 
 
