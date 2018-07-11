@@ -233,18 +233,15 @@ Try `cangen can0` to see the green led ficker. Try `cangen can1` to see the red 
 `candump -s 2 -B can0 can1&`
 `candump -s 2 -B can1 can0&`
 will bridge the two networks.
-`top -c`
-shows
-```
-top - 12:36:49 up 11 min,  1 user,  load average: 0.09, 0.17, 0.13 Tasks:  77 total,   1 running,  76 sleeping,   0 stopped,   0 zombie
-%Cpu(s):  5.4 us, 13.1 sy,  0.0 ni, 76.2 id,  0.0 wa,  0.0 hi,  5.4 si,  0.0 st
-KiB Mem:    508524 total,    64504 used,   444020 free,     6712 buffers
-KiB Swap:        0 total,        0 used,        0 free.    25868 cached Mem
 
-  PID USER      PR  NI    VIRT    RES    SHR S %CPU %MEM     TIME+ COMMAND
- 1159 ubuntu    20   0    1164    344    288 S  8.9  0.1   0:04.78 candump -s 2 -B can1 can0
- 1156 ubuntu    20   0    1164    344    288 S  7.0  0.1   0:10.79 candump -s 2 -B can0 can1
- ```
+Can-utils is installed in `/usr/bin`
+```
+$ which candump
+/usr/bin/candump
+```
+
+To make this into a service that runs on boot, do the following:
+
 
 ## Writing Programs
 
