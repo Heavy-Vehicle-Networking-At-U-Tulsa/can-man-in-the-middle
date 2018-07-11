@@ -132,6 +132,96 @@ Save with Control-X, Y, Enter. Then make it executable:
 sudo chmod 755 /etc/rc.local
 sudo shutdown -r now
 ```
+### Python and CAN
+Python 3  is installed at version 3.5 on this image. To test this
+```
+debian@beaglebone:~$ python3
+Python 3.5.3 (default, Jan 19 2017, 14:11:04)
+[GCC 6.3.0 20170118] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>>
+```
+Python comes with sockets and socketCAN is available by default.
+You can also install python-can as an interface:
+```
+python3 -m pip install python-can
+```
+Building the dependency of `wrapt` failed to build, but the pip command completed.
+ 
+#### Example Program
+The following is a basic Python3 program to forward can messages from one socket to another.
+```
+#!/bin/env python
+import socket
+import struct
+
+canformat = '<IB3x8s'
+
+class CanBridge():
+    def __init__(self, interface_from, interface_to):
+        self.interface_from = interface_from
+        self.interface_to = interface_to
+        self.canSocket_to = socket.socket(socket.PF_CAN, socket.SOCK_RAW, socket.CAN_RAW)
+        self.canSocket_from = socket.socket(socket.PF_CAN, socket.SOCK_RAW, socket.CAN_RAW)
+        try: 
+            self.canSocket_to.bind((self.interface_to,))
+            self.canSocket_from.bind((self.interface_from,))
+        except OSError: 
+            print("Could not bind to interfaces")
+        #put the sockets in blocking mode.
+        self.canSocket_to.settimeout(None)
+        self.canSocket_from.settimeout(None)
+
+    def run(self):
+        while True:
+            raw_bytes = self.canSocket_from.recv(512)
+            try:
+                self.canSocket_to.send(raw_bytes)
+            except OSError: #Buffer overflow usually from lack of connection.
+                pass
+
+            rawID,DLC,candata = struct.unpack(canformat,raw_bytes)
+            canID = rawID & 0x1FFFFFFF
+            candata_string = " ".join(["{:02X}".format(b) for b in candata])
+            print("{:08X} {}".format(canID, candata_string))
+
+if __name__ == '__main__':
+    bridge = CanBridge('can1','can0')
+    bridge.run()
+```
+Another simple program using the `python-can` library:
+```
+#!/bin/env python3
+import can
+
+bus = can.interface.Bus(bustype='socketcan', channel='can1', bitrate=250000)
+try:
+    while True:
+        message = bus.recv()
+        candata_string = " ".join(["{:02X}".format(b) for b in message.data])
+        print("{:08X} {}".format(message.arbitration_id, candata_string))
+except KeyboardInterrupt:
+    bus.shutdown()
+    print("Finished.")
+```
+There is an noticalble delay when starting this program. The output is as follows when connected to a brake controller and a Smart Sensor Simulator 2:
+```
+18FEBF0B 00 00 7D 7D 7D 7D FF FF
+0CFE6E0B 00 00 00 00 00 00 00 00
+0CFE6E0B 00 00 00 00 00 00 00 00
+0CFE6E0B 00 00 00 00 00 00 00 00
+18FEF10B FF 00 00 FF FF FF FF FF
+0CFE6E0B 00 00 00 00 00 00 00 00
+18F00131 00 00 00 00 00 00 00 00
+18F0010B 00 00 00 00 00 00 00 00
+18FEF117 00 00 00 00 00 00 00 00
+18FEF128 00 00 00 00 00 00 00 00
+18FEF121 00 00 00 00 00 00 00 00
+18FEF131 00 00 00 00 00 00 00 00
+18E00017 00 00 00 00 00 00 00 00
+^CFinished.
+```
+
 
 ## Testing with an SSS2
 Plug in the CAN-in-the-middle to the SSS2 and turn on the keyswitch of the SSS2 (press the knob for 2 seconds).
