@@ -2,7 +2,7 @@
 or better yet, "can-in-the-middle" is system using the TU Truck Cape, a BeagleBone Black, socketCAN and Python3 to inspect and forward CAN network traffic. Particular interest is on J1939 used in heavy trucks.
 
 ## Setting up the Hardware
-The hardware for this project is 100% open. You can purchase every part of the hardware and and hand assemble the pieces. The schematic for the Truck Cape is in the docs folder.
+The hardware for this project is 100% open. You can purchase every part of the hardware and hand assemble the pieces. The schematic for the Truck Cape is in the docs folder.
 
 ### Bill of Materials
 
@@ -204,7 +204,7 @@ except KeyboardInterrupt:
     bus.shutdown()
     print("Finished.")
 ```
-There is an noticalble delay when starting this program. The output is as follows when connected to a brake controller and a Smart Sensor Simulator 2:
+There is an noticeable delay when starting this program. The output is as follows when connected to a brake controller and a Smart Sensor Simulator 2:
 ```
 18FEBF0B 00 00 7D 7D 7D 7D FF FF
 0CFE6E0B 00 00 00 00 00 00 00 00
