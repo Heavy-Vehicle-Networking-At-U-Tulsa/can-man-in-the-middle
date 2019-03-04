@@ -3,7 +3,7 @@ This readme describes how to build the Man-in-the-middle Revison 3.
 
 The circuit was insipired by the Truck Cape, which was inspired by the Truck Duck, which was inspired by the Forensic Link Adapter. 
 
-The ![Schematic](TruckCape v3 MITM.pdf) is in PDF format.
+The ![Schematic](TruckCapev3MITMSchematic.pdf) is in PDF format.
 
 ## Errata
 In hardware version 3 MITM, there are a few issues to address:
@@ -16,10 +16,7 @@ Clip pin 41 to ensure the BeagleBone Black will boot. A mechanical pencil shows 
 ![Clip Pin](Pin41isRemoved.jpg)
 
 ## Build process
-All parts are through hole parts. A bill of materials in Excel format is included to help acquire the parts. THe silkscreen on the PCB is labeled by part number or value, so hand assembly should be pretty straigh forward. Have a look at some of the photos to see the final product.
-
-The end connectors are cut with an epilog laser cutter. Each end is cut one side is for the BeagleBone Black and the other side is for the LED and cables.
-
+All parts are through hole parts. A bill of materials in Excel format is included to help acquire the parts. The silkscreen on the PCB is labeled by part number or value, so hand assembly should be pretty straigh forward. Have a look at some of the photos to see the final product.
 
 
 ### Top View
@@ -34,8 +31,19 @@ The bottom of board shows the relays and the wire tracing.
 
 The printed circuit board was purchased from OSH Park. Since there are issues with the circuit, this is not a shared board. See the Hardware Revision 4 directory to get a new boards made. 
 
+### End Panels
+The end connectors are cut with an epilog laser cutter. Each end is cut one side is for the BeagleBone Black and the other side is for the LED and cables.
+
+The pdf used for the laser cutter has a hole for the cord grip and the BeagleBone Black openings. 
+
+![BeagleBone End](Hammond_1455N_BeagleBone_End.pdf)
+
+![LED End](Hammond_1455N_End_B.pdf)
+
+The settings on the 40 watt Epilog laser cutter was 17% speed with 100% power and max frequency. The plastic end panels were placed in the upper left corner of the laser cutter facing down. 
+
 ## PCBs
-If you want your own boards made, you can send a board house these [gerber files](TruckCapeHammondRev3MITM.zip) as a zip file.
+If you want your own boards made, you can send a board house these [gerber files](TruckCapeHammondRev3MITM.zip) as a zip file. However, these boards have the issues corrected by the errata built in; it is advised to use a Rev 4 MITM board.
 
 ## Top Level Bill of Materials
 
@@ -79,3 +87,5 @@ The bill of materials for the circuit card assembly is as follows:
 | TP1.5KE30CA | Z1  | 1 | Littelfuse Inc. | TP1.5KE30CA | Digi-Key | F7610CT-ND |
 
 This bill of materials should match with the schematic labels and the board outlines.
+
+Installing the LED at the end will ensure that it will mate with the hole in the end panel correctly.
