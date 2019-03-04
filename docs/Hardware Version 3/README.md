@@ -61,17 +61,17 @@ If you want to build one of these for yourself, the printed circuit board is ava
 
 The bill of materials for the circuit card assembly is as follows:
 
-| Comment |  Designator  | Quantity | Manufacturer | PartNumber | Supplier 1 | Supplier Part Number 1 |
-| ------- | ------- | ------- | ------- | ------- | ------- | -------  | ------- | ------- |
+| Comment |  Designator  | Quantity | Manufacturer | Part Number | Supplier | Supplier Part Number |
+| ------- | ------- | ------- | ------- | -------  | ------- | ------- |
 | BeagleBoneBlack  | BeagleBoneBlack1 |  2 | Sullins Connector Solutions | PREC023DAAN-RC | Digi-Key | S2012EC-23-ND |
 | 0.1uF  | C1, C4, C5, C6, C9  | 5 | Vishay BC Components | K104K20X7RH53H5 | Digi-Key | BC5139-ND |
-| 1uF  | C2, C3, C10  3 | Murata Electronics North America | RDER72A105K2M1H03A | Digi-Key | 490-9198-1-ND |
+| 1uF  | C2, C3, C10 | 3 | Murata Electronics North America | RDER72A105K2M1H03A | Digi-Key | 490-9198-1-ND |
 | 220uF | C7, C8 |  2 | EPCOS (TDK) | B41858C6227M000 | Digi-Key | 495-6000-ND |
 | STPS2150  | D1 | 1 | STMicroelectronics | STPS2150 | Digi-Key | 497-3213-1-ND |
 | LED | D2  | 1 | Lite-On Inc. | LTL-4233 | Digi-Key | 160-1130-ND |
 | Molex 39-30-1100 | J1, J2  | 2 | Molex | 39-30-1100 | Digi-Key | WM1355-ND |
 | EC2-5NU Relay-DPDT  | K1, K2, K3, K4, K5, K6  | 6 | KEMET | EC2-5NU | Digi-Key | 399-11052-5-ND |
-|  J1-1 to J1-6 |  P1 || 1 | Sullins Connector Solutions | PPPC061LFBN-RC | Digi-Key | S7039-ND |
+| J1-1 to J1-6 |  P1 | 1 | Sullins Connector Solutions | PPPC061LFBN-RC | Digi-Key | S7039-ND |
 | Header 8H |  P2, P3 |  2 | Phoenix Contact | 1789472 | Digi-Key | 277-14044-ND |
 | RKEF110 | PTC1 | 1 | Littelfuse Inc. | RKEF110 | Digi-Key | RKEF110HF-ND |
 | 4.7k | R1, R2, R3, R6, R7, R11, R13  | 7 | Yageo | CFR-25JB-52-4K7 | Digi-Key | 4.7KQBK-ND |
@@ -80,7 +80,7 @@ The bill of materials for the circuit card assembly is as follows:
 | SN74LS126AN  | U1  | 1 | Texas Instruments | SN74LS126AN | Digi-Key | 296-3643-5-ND |
 | ULQ2003 Darlington Array | U2  | 1 | Texas Instruments | ULQ2003AN | Digi-Key | 296-22623-5-ND |
 | MCP2562 | U3, U5 | 2 | Microchip Technology | MCP2562-E/P | Digi-Key | 296-26344-1-ND |
-| LTV-817  U4  | 1 | Lite-On Inc. | LTV-817 | Digi-Key | 160-1366-5-ND |
+| LTV-817 | U4  | 1 | Lite-On Inc. | LTV-817 | Digi-Key | 160-1366-5-ND |
 | OKI-78SR | U6  | 1 | Murata Power Solutions Inc. | OKI-78SR-5/1.5-W36H-C | Digi-Key | 811-2692-ND |
 | SN74AHC14N | U7 | 1 | Texas Instruments | SN74AHC14N | Digi-Key | 296-4550-5-ND |
 | SN75HVD12  | U8, U9  | 2 | Texas Instruments | SN75HVD12P | Digi-Key | SN75HVD12P |
