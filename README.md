@@ -1,13 +1,28 @@
 # CAN-man-in-the-middle
-or better yet, "can-in-the-middle" is system using the TU Truck Cape, a BeagleBone Black, socketCAN and Python3 to inspect and forward CAN network traffic. Particular interest is on J1939 used in heavy trucks.
+or better yet, "can-in-the-middle" is system using the TU Truck Cape, a BeagleBone Black, socketCAN and Python3 to inspect and forward CAN network traffic. Particular interest is on J1939 used in heavy trucks. Contributions to this repository are a result of the funded research on heavy vehicle cybersecurity and digital forensics at the University of Tulsa. 
 
 ## Setting up the Hardware
-The hardware for this project is 100% open. You can purchase every part of the hardware and hand assemble the pieces. The schematic for the Truck Cape is in the docs folder.
+The hardware for this project is 100% open. You can purchase every part of the hardware and hand assemble the pieces. The schematic for the Truck Cape or the CAN Man-in-the-middle is shown in the docs folder. There are multiple hardware versions for different form factors and switching functions. All versions use the BeagleBone Black and have 2 CAN channels and 2 J1708 channels. For more details, see the ![docs](docs) folder.
 
-### Bill of Materials
+## Accessing the BeagleBone Black
 
-### Build the TruckCape
-A completed truck cape is shown below.
+### USB
+A mini usb connection has an RNDIS connection for treating the connection like a network. The IP address for the USB connection is 192.168.7.2. However, in Windows 10, the driver for this connection is not install correctly by default. To set up the driver for this, please see this ![guide](http://www.synercontechnologies.com/wp-content/uploads/2018/05/Fixing-RNDIS-Error-on-Windows-10..pdf).
+
+### Ethernet
+The BeagleBone Black is setup by default to have a DHCP client to get an IP address. Therefore, a DHCP server is needed for the device to get an IP address.
+
+### Shell Access
+SSH is a prefered method to access the operating system. For Windows users, PuTTy is available.
+
+### File Transfer
+WinSCP can handle file transfers over a secure connection from a Windows machine.
+
+### Remote Sublime
+
+To edit files using Sublime in on the Beaglebone, there is a package in Sublime Text 3 called RemoteSubl. https://github.com/randy3k/RemoteSubl
+
+http://blog.keyrus.co.uk/editing_files_on_a_remote_server_using_sublime.html
 
 ## Setting up the Operating System (ARM Linux)
 The project is based on the following image:
@@ -133,7 +148,7 @@ sudo chmod 755 /etc/rc.local
 sudo shutdown -r now
 ```
 ### Python and CAN
-Python 3  is installed at version 3.5 on this image. To test this
+Python 3.5 is installed at this version of Linux. To test this
 ```
 debian@beaglebone:~$ python3
 Python 3.5.3 (default, Jan 19 2017, 14:11:04)
@@ -141,7 +156,7 @@ Python 3.5.3 (default, Jan 19 2017, 14:11:04)
 Type "help", "copyright", "credits" or "license" for more information.
 >>>
 ```
-Python comes with sockets and socketCAN is available by default.
+Python comes with sockets and socketCAN, which is available by default.
 You can also install python-can as an interface:
 ```
 python3 -m pip install python-can
@@ -204,7 +219,7 @@ except KeyboardInterrupt:
     bus.shutdown()
     print("Finished.")
 ```
-There is an noticeable delay when starting this program. The output is as follows when connected to a brake controller and a Smart Sensor Simulator 2:
+There is a noticeable delay when starting this program. The output is as follows when connected to a brake controller and a Smart Sensor Simulator 2:
 ```
 18FEBF0B 00 00 7D 7D 7D 7D FF FF
 0CFE6E0B 00 00 00 00 00 00 00 00
@@ -234,30 +249,26 @@ Try `cangen can0` to see the green led ficker. Try `cangen can1` to see the red 
 `candump -s 2 -B can1 can0&`
 will bridge the two networks.
 
+To make this into a service that runs on boot add these two lines to the `/etc/rc.local` file. 
+
+
 Can-utils is installed in `/usr/bin`
 ```
 $ which candump
 /usr/bin/candump
 ```
 
-To make this into a service that runs on boot, do the following:
+### Remote Access
+Interfacing with CAN over Ethernet has been done in this project.
 
+https://github.com/Heavy-Vehicle-Networking-At-U-Tulsa/TruckCapeProjects/tree/master/SocketCAN
 
-## Writing Programs
+In this project, CAN data is efficiently transferred over TCP for remote interaction.
 
-The image comes with Python 3.5
+## Errata
+In hardware version 3 MITM, there are a few issues to address:
+  1. The relays need to be mounted on the bottom of the board to get the correct polarity of voltage across the coil. This has been fixed in MITM rev 4.
+  2. The pin going to P8_41 needs to be clipped off the header or removed. This is for switch 3. A jumper wire needs to be routed from pin3 of U2 to P8_37, which is GPIO78.
+  3. The LED1 net was not connected. Add a jumper wire from P8_38 (GPIO79) to U2 Pin 7. 
 
-Install python-can
-```
-pip3 install python-can
-```
-
-Make something cool in Python!
-
-### Remote Sublime
-
-To edit files using Sublime in on the Beaglebone, there is a package in Sublime Text 3 called RemoteSubl. https://github.com/randy3k/RemoteSubl
-
-http://blog.keyrus.co.uk/editing_files_on_a_remote_server_using_sublime.html
-
-
+With these updates to MITM Rev3 and all MITM Rev 4 boards, the file in ![`/etc/rc.local`](rc.local) will enable the GPIO pins.  

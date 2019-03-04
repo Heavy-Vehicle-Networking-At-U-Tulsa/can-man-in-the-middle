@@ -1,0 +1,42 @@
+#!/bin/sh -e
+# Switch 5
+echo "70" > /sys/class/gpio/export
+echo "out" > /sys/class/gpio/gpio70/direction
+echo "1" > /sys/class/gpio/gpio70/value
+echo "0" > /sys/class/gpio/gpio70/value
+
+# Switch 6
+echo "71" > /sys/class/gpio/export
+echo "out" > /sys/class/gpio/gpio71/direction
+echo "1" > /sys/class/gpio/gpio71/value
+echo "0" > /sys/class/gpio/gpio71/value
+
+# Switch 4
+echo "75" > /sys/class/gpio/export
+echo "out" > /sys/class/gpio/gpio75/direction
+echo "1" > /sys/class/gpio/gpio75/value
+echo "0" > /sys/class/gpio/gpio75/value
+
+#Switch 1
+echo "76" > /sys/class/gpio/export
+echo "out" > /sys/class/gpio/gpio76/direction
+echo "1" > /sys/class/gpio/gpio76/value
+echo "0" > /sys/class/gpio/gpio76/value
+
+# Switch 2
+echo "77" > /sys/class/gpio/export
+echo "out" > /sys/class/gpio/gpio77/direction
+echo "1" > /sys/class/gpio/gpio77/value
+echo "0" > /sys/class/gpio/gpio77/value
+
+# Switch 3
+echo "78" > /sys/class/gpio/export
+echo "out" > /sys/class/gpio/gpio78/direction
+echo "1" > /sys/class/gpio/gpio78/value
+echo "0" > /sys/class/gpio/gpio78/value
+
+#LED
+echo "79" > /sys/class/gpio/export
+echo "out" > /sys/class/gpio/gpio79/direction
+echo "1" > /sys/class/gpio/gpio79/value
+exit 0
