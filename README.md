@@ -4,6 +4,64 @@ or better yet, "can-in-the-middle" is system using the TU Truck Cape, a BeagleBo
 ## Setting up the Hardware
 The hardware for this project is 100% open. You can purchase every part of the hardware and hand assemble the pieces. The schematic for the Truck Cape or the CAN Man-in-the-middle is shown in the docs folder. There are multiple hardware versions for different form factors and switching functions. All versions use the BeagleBone Black and have 2 CAN channels and 2 J1708 channels. For more details, see the ![docs](docs) folder.
 
+### Controlling Relays
+In the hardware revisions with relays (versions 3 and 4), the configuration of the relay switches enables the MITM to be moved between different networks. 
+From the command line:
+
+#### Switch 6
+
+`echo 0 > /sys/class/gpio/gpio71/value` connects terminating resistors.
+
+`echo 1 > /sys/class/gpio/gpio71/value` connects both beaglebone CAN channels together.
+
+#### Switch 5
+
+`echo 0 > /sys/class/gpio/gpio70/value` connects J1939 (Pins C and D) on the B side to `can0`.
+
+`echo 1 > /sys/class/gpio/gpio70/value` connects CAN2 (Pins H and J) on the B side to `can0`.
+
+#### Switch 4
+`echo 0 > /sys/class/gpio/gpio75/value` connects J1708 (Pins F and G) on the A side to J1708 (Pins F and G) on the B side.
+
+`echo 1 > /sys/class/gpio/gpio75/value` disconnects J1708 from either side (requires software bridge).
+
+
+#### Switch 1
+`echo 0 > /sys/class/gpio/gpio76/value` disconnects J1939 from either side (man-in-the-middle mode).
+
+`echo 1 > /sys/class/gpio/gpio76/value` connects J1939 (Pins C and D) on the A side to J1939 on the B side (passthrough mode).
+
+#### Switch 2
+`echo 0 > /sys/class/gpio/gpio77/value` connects CAN2 (Pins H and J) on the A side to CAN2 on the B side (passthrough mode).
+
+`echo 1 > /sys/class/gpio/gpio77/value` disconnects CAN2 from either side (man-in-the-middle mode).
+
+#### Switch 3
+`echo 0 > /sys/class/gpio/gpio78/value` connects the `can1` socket to J1939 (Pins C and D) on the A side.
+
+`echo 1 > /sys/class/gpio/gpio78/value` connects the `can1` socket to CAN2 (Pins H and J) on the A side.
+
+#### LED
+`echo 0 > /sys/class/gpio/gpio79/value` Turns off the board mounted LED.
+`echo 1 > /sys/class/gpio/gpio79/value` Turns on the board mounted LED.
+
+#### Using Python
+In the `os.system` command enables execution of these commands.
+
+```
+debian@beaglebone:~$ python3
+Python 3.5.3 (default, Jan 19 2017, 14:11:04)
+[GCC 6.3.0 20170118] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import os
+>>> os.system("sh -c \"echo 0 > /sys/class/gpio/gpio76/value\"")
+0
+>>> os.system("sh -c \"echo 1 > /sys/class/gpio/gpio76/value\"")
+0
+>>>
+```
+
+
 ## Accessing the BeagleBone Black
 
 ### USB
