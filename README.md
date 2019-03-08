@@ -108,9 +108,21 @@ user: debian
 
 password: temppwd
 
-It may be helpful to connect to the Internet through Ethernet. Once the Ethernet is plugged in, you can check an IP address through the USB connection using `ifconfig`. Look for the IP address for eth0
+It may be helpful to connect to the Internet through Ethernet. Once the Ethernet is plugged in, you can check an IP address through the USB connection using `ifconfig`. Look for the IP address for eth0.
 
 BBone Black Wireless has not been tested yet.
+
+### Enabling relays on Boot
+`cd /etc/`
+
+`sudo nano rc.local`
+
+Copy the rc.local file contents into this editor.
+
+`sudo chmod 755 rc.local`
+
+`sudo sh rc.local` should produce a series of relay clicks and leave the LED on.
+
 
 ### Setting up CAN 
 
