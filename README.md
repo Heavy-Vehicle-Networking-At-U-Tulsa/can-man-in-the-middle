@@ -4,64 +4,6 @@ or better yet, "can-in-the-middle" is system using the TU Truck Cape, a BeagleBo
 ## Setting up the Hardware
 The hardware for this project is 100% open. You can purchase every part of the hardware and hand assemble the pieces. The schematic for the Truck Cape or the CAN Man-in-the-middle is shown in the docs folder. There are multiple hardware versions for different form factors and switching functions. All versions use the BeagleBone Black and have 2 CAN channels and 2 J1708 channels. For more details, see the ![docs](docs) folder.
 
-### Controlling Relays
-In the hardware revisions with relays (versions 3 and 4), the configuration of the relay switches enables the MITM to be moved between different networks. 
-From the command line:
-
-#### Switch 6
-
-`echo 0 > /sys/class/gpio/gpio71/value` connects terminating resistors.
-
-`echo 1 > /sys/class/gpio/gpio71/value` connects both beaglebone CAN channels together.
-
-#### Switch 5
-
-`echo 0 > /sys/class/gpio/gpio70/value` connects J1939 (Pins C and D) on the B side to `can0`.
-
-`echo 1 > /sys/class/gpio/gpio70/value` connects CAN2 (Pins H and J) on the B side to `can0`.
-
-#### Switch 4
-`echo 0 > /sys/class/gpio/gpio75/value` connects J1708 (Pins F and G) on the A side to J1708 (Pins F and G) on the B side.
-
-`echo 1 > /sys/class/gpio/gpio75/value` disconnects J1708 from either side (requires software bridge).
-
-
-#### Switch 1
-`echo 0 > /sys/class/gpio/gpio76/value` disconnects J1939 from either side (man-in-the-middle mode).
-
-`echo 1 > /sys/class/gpio/gpio76/value` connects J1939 (Pins C and D) on the A side to J1939 on the B side (passthrough mode).
-
-#### Switch 2
-`echo 0 > /sys/class/gpio/gpio77/value` connects CAN2 (Pins H and J) on the A side to CAN2 on the B side (passthrough mode).
-
-`echo 1 > /sys/class/gpio/gpio77/value` disconnects CAN2 from either side (man-in-the-middle mode).
-
-#### Switch 3
-`echo 0 > /sys/class/gpio/gpio78/value` connects the `can1` socket to J1939 (Pins C and D) on the A side.
-
-`echo 1 > /sys/class/gpio/gpio78/value` connects the `can1` socket to CAN2 (Pins H and J) on the A side.
-
-#### LED
-`echo 0 > /sys/class/gpio/gpio79/value` Turns off the board mounted LED.
-`echo 1 > /sys/class/gpio/gpio79/value` Turns on the board mounted LED.
-
-#### Using Python
-In the `os.system` command enables execution of these commands.
-
-```
-debian@beaglebone:~$ python3
-Python 3.5.3 (default, Jan 19 2017, 14:11:04)
-[GCC 6.3.0 20170118] on linux
-Type "help", "copyright", "credits" or "license" for more information.
->>> import os
->>> os.system("sh -c \"echo 0 > /sys/class/gpio/gpio76/value\"")
-0
->>> os.system("sh -c \"echo 1 > /sys/class/gpio/gpio76/value\"")
-0
->>>
-```
-
-
 ## Accessing the BeagleBone Black
 
 ### USB
@@ -85,7 +27,7 @@ http://blog.keyrus.co.uk/editing_files_on_a_remote_server_using_sublime.html
 ## Setting up the Operating System (ARM Linux)
 The project is based on the following image:
 
-http://debian.beagleboard.org/images/bone-debian-9.4-iot-armhf-2018-06-17-4gb.img.xz
+http://debian.beagleboard.org/images/bone-debian-9.5-iot-armhf-2018-10-07-4gb.img.xz
 
 Follow the instructions at http://beagleboard.org/static/beaglebone/latest/README.htm
 
@@ -95,12 +37,13 @@ We assume you are using Windows 7 or Windows 10:
 To install this system on the BeagleBone eMMC do the following: 
   1. Decompress the image using 7-zip: https://www.7-zip.org/download.html
   2. Write the image file to an SD card using Win32 Imager: https://sourceforge.net/projects/win32diskimager/files/latest/download
-  3. Insert the micro SD card an boot the system while holding the SD button. A USB cable can power the BBB for this.
-  4. Log into the system by using Putty to ssh into 192.168.7.2. The user is `debian` and the password is `temppwd`
+  3. Insert the micro SD card into the BeagleBone Black.
+  3. Boot the system while holding down the SD boot button. A USB cable can power the BBB for this. 
+  4. Log into the system by using Putty to ssh into 192.168.7.2 (with USB). The user is `debian` and the password is `temppwd`
   4. At the command prompt, type  `sudo nano /boot/uEnv.txt`. You may have to enter the password again.
-  5. Uncomment an existing line so it says: `cmdline=init=/opt/scripts/tools/eMMC/init-eMMC-flasher-v3.sh` 
+  5. Uncomment the last existing line so it says: `cmdline=init=/opt/scripts/tools/eMMC/init-eMMC-flasher-v3.sh` 
   6. reboot: `sudo shutdown -r now`
-  7. The LEDs will flash back and forth then light up solid when finished (10 minutes or so).
+  7. The system will reboot and after a minuite or so, the LEDs will flash back and forth then light up solid when finished (10 minutes or so).
   8. Remove the SD card and press the reset button or cycle power.
   9. Login again and finish creating the environment.
 
@@ -112,51 +55,117 @@ It may be helpful to connect to the Internet through Ethernet. Once the Ethernet
 
 BBone Black Wireless has not been tested yet.
 
-### Enabling relays on Boot
-`cd /etc/`
+## Creating the environment.
 
-`sudo nano rc.local`
+The baseline is the 4.14.71 Linux Kernel. Verify you have the correct operating system installed. Try the following commands and compare the output.
 
-Copy the rc.local file contents into this editor.
-
-`sudo chmod 755 rc.local`
-
-`sudo sh rc.local` should produce a series of relay clicks and leave the LED on.
-
-
-### Setting up CAN 
-
-Login to the beaglbone and make the following changes:
-
-Steps to get both CAN channels working:
-  1. `git clone https://github.com/RobertCNelson/dtb-rebuilder` 
-  2. `cd dtb-rebuilder`
-  3. `nano src/arm/am335x-boneblack-custom.dts`
-    Uncommment the following lines (Remove the //) and save.
-``` 
-#include "am335x-peripheral-can0.dtsi"
-#include "am335x-bone-pinmux-can0.dtsi"
-
-#include "am335x-peripheral-can1.dtsi"
-#include "am335x-bone-pinmux-can1.dtsi"
 ```
-  4. `./dtc-overlay.sh`
-  4. `make`
-  5. `sudo make install`
-  6. `cd /boot`
-  7. `sudo nano uEnv.txt`
+debian@beaglebone:~$ uname -a
+Linux beaglebone 4.14.71-ti-r80 #1 SMP PREEMPT Fri Oct 5 23:50:11 UTC 2018 armv7l GNU/Linux
+```
 
-Edit the uEnv.txt file:
 ```
-sudo nano /boot/uEnv.txt
+debian@beaglebone:~$ cat /etc/os-release
+PRETTY_NAME="Debian GNU/Linux 9 (stretch)"
+NAME="Debian GNU/Linux"
+VERSION_ID="9"
+VERSION="9 (stretch)"
+ID=debian
+HOME_URL="https://www.debian.org/"
+SUPPORT_URL="https://www.debian.org/support"
+BUG_REPORT_URL="https://bugs.debian.org/"
 ```
-Add the line 
+
 ```
-dtb=am335x-boneblack-custom.dtb
-``` 
-near the top of the file.
+debian@beaglebone:~$ cat /etc/debian_version
+9.5
+```
+
+```
+debian@beaglebone:~$ cat /etc/dogtag
+BeagleBoard.org Debian Image 2018-10-07
+```
+
+### Controlling Relays
+In the hardware revisions with relays (versions 3 and 4), the configuration of the relay switches enables the MITM to be moved between different networks. 
+
+All relays and LEDs require the 5V0 to be present, which comes from the 12V source. This means if the device is powered with just the USB, the relays won't work.
+
+From the command line:
+
+#### Switch 1
+`config-pin P8_39 0`  disconnects J1939 from either side (man-in-the-middle mode).
+
+`config-pin P8_39 1`  connects J1939 (Pins C and D) on the A side to J1939 on the B side (passthrough mode).
+
+#### Switch 2
+`config-pin P8_40 0`  connects CAN2 (Pins H and J) on the A side to CAN2 on the B side (passthrough mode).
+
+`config-pin P8_40 1`  disconnects CAN2 from either side (man-in-the-middle mode).
+
+#### Switch 3
+`config-pin P8_37 0`  connects the `can1` socket to J1939 (Pins C and D) on the A side.
+
+`config-pin P8_37 1`  connects the `can1` socket to CAN2 (Pins H and J) on the A side.
+
+#### Switch 4
+`config-pin P8_42 0` connects J1708 (Pins F and G) on the A side to J1708 (Pins F and G) on the B side.
+
+`config-pin P8_42 1` disconnects J1708 from either side (requires software bridge).
+
+#### Switch 5
+
+`config-pin P8_45 0` connects J1939 (Pins C and D) on the B side to `can0`.
+
+`config-pin P8_45 1` connects CAN2 (Pins H and J) on the B side to `can0`.
+
+#### Switch 6
+
+`config-pin P8_46 0` connects terminating resistors.
+
+`config-pin P8_46 1` connects both beaglebone CAN channels together.
+
+
+#### LED
+`config-pin P8_38 0`  Turns off the board mounted LED.
+
+`config-pin P8_38 1`  Turns on the board mounted LED.
+
+#### Using Python
+The `os.system` command enables execution of these commands.
+
+```
+debian@beaglebone:~$ python3
+Python 3.5.3 (default, Jan 19 2017, 14:11:04)
+[GCC 6.3.0 20170118] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import os
+>>> os.system("config_pin P8_38 1")
+```
+
+Or, you can use Adafruit's Python Package:
+
+`sudo apt-get install build-essential python-dev python-pip3 -y`
+
+`sudo pip3 install Adafruit_BBIO`
+
+Example of turning on the LED:
+```
+debian@beaglebone:~$ python3
+Python 3.5.3 (default, Sep 27 2018, 17:25:39)
+[GCC 6.3.0 20170516] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import Adafruit_BBIO.GPIO as GPIO
+>>> GPIO.setup("P8_38",GPIO.OUT)
+>>> GPIO.output("P8_38",GPIO.HIGH)
+```
+
+### Enabling Relays and CAN on Boot
+
+`sudo nano /boot/uEnv.txt`
 
 Change the following block by uncommenting some lines shown below:
+
 ```
 ###Disable auto loading of virtual capes (emmc/video/wireless/adc)
 #disable_uboot_overlay_emmc=1
@@ -165,6 +174,22 @@ disable_uboot_overlay_audio=1
 #disable_uboot_overlay_wireless=1
 disable_uboot_overlay_adc=1
 ```
+Exit and save the file.
+
+Restart `sudo shutdown -r now`
+
+We need to load the GPIO settings into the system to use them.
+
+`sudo nano /etc/rc.local`
+
+Copy the rc.local file contents into this editor. The rc.local file runs on boot. It uses the `config-pin` command to set the pins to the appropriate function (like GPIO or CAN)
+
+`sudo chmod 755 rc.local`
+
+Restart the system. `sudo shutdown -r now`.
+
+`sudo sh rc.local` should produce a series of relay clicks and leave the LED on.
+
 
 #### Autostart can0 and can1
 To bring up both CAN interfaces at boot change `/etc/network/interfaces` with the following commands
@@ -172,6 +197,7 @@ To bring up both CAN interfaces at boot change `/etc/network/interfaces` with th
 ```
 sudo nano /etc/network/interfaces
 ```
+
 Add these lines at the end of the file.
 ```
 allow-hotplug can0
@@ -217,6 +243,7 @@ Save with Control-X, Y, Enter. Then make it executable:
 sudo chmod 755 /etc/rc.local
 sudo shutdown -r now
 ```
+
 ### Python and CAN
 Python 3.5 is installed at this version of Linux. To test this
 ```
