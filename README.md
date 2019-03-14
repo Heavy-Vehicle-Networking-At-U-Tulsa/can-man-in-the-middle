@@ -4,25 +4,7 @@ or better yet, "can-in-the-middle" is system using the TU Truck Cape, a BeagleBo
 ## Setting up the Hardware
 The hardware for this project is 100% open. You can purchase every part of the hardware and hand assemble the pieces. The schematic for the Truck Cape or the CAN Man-in-the-middle is shown in the docs folder. There are multiple hardware versions for different form factors and switching functions. All versions use the BeagleBone Black and have 2 CAN channels and 2 J1708 channels. For more details, see the ![docs](docs) folder.
 
-## Accessing the BeagleBone Black
 
-### USB
-A mini usb connection has an RNDIS connection for treating the connection like a network. The IP address for the USB connection is 192.168.7.2. However, in Windows 10, the driver for this connection is not install correctly by default. To set up the driver for this, please see this ![guide](http://www.synercontechnologies.com/wp-content/uploads/2018/05/Fixing-RNDIS-Error-on-Windows-10..pdf).
-
-### Ethernet
-The BeagleBone Black is setup by default to have a DHCP client to get an IP address. Therefore, a DHCP server is needed for the device to get an IP address.
-
-### Shell Access
-SSH is a prefered method to access the operating system. For Windows users, PuTTy is available.
-
-### File Transfer
-WinSCP can handle file transfers over a secure connection from a Windows machine.
-
-### Remote Sublime
-
-To edit files using Sublime in on the Beaglebone, there is a package in Sublime Text 3 called RemoteSubl. https://github.com/randy3k/RemoteSubl
-
-http://blog.keyrus.co.uk/editing_files_on_a_remote_server_using_sublime.html
 
 ## Setting up the Operating System (ARM Linux)
 The project is based on the following image:
@@ -54,6 +36,27 @@ password: temppwd
 It may be helpful to connect to the Internet through Ethernet. Once the Ethernet is plugged in, you can check an IP address through the USB connection using `ifconfig`. Look for the IP address for eth0.
 
 BBone Black Wireless has not been tested yet.
+
+## Accessing the BeagleBone Black
+
+### USB
+A mini usb connection has an RNDIS connection for treating the connection like a network. The IP address for the USB connection is 192.168.7.2. However, in Windows 10, the driver for this connection is not install correctly by default. To set up the driver for this, please see this ![guide](http://www.synercontechnologies.com/wp-content/uploads/2018/05/Fixing-RNDIS-Error-on-Windows-10..pdf).
+
+### Ethernet
+The BeagleBone Black is setup by default to have a DHCP client to get an IP address. Therefore, a DHCP server is needed for the device to get an IP address.
+
+### Shell Access
+SSH is a prefered method to access the operating system. For Windows users, PuTTy is available.
+
+### File Transfer
+WinSCP can handle file transfers over a secure connection from a Windows machine.
+
+### Remote Sublime
+
+To edit files using Sublime in on the Beaglebone, there is a package in Sublime Text 3 called RemoteSubl. https://github.com/randy3k/RemoteSubl
+
+http://blog.keyrus.co.uk/editing_files_on_a_remote_server_using_sublime.html
+
 
 ## Creating the environment.
 
@@ -190,7 +193,34 @@ Restart the system. `sudo shutdown -r now`.
 
 `sudo sh rc.local` should produce a series of relay clicks and leave the LED on.
 
+#### Python Program to control relays
+A Python module is available to setup common relay configurations or control each relay individually. The examples are as follows:
 
+```
+debian@beaglebone:~$ python3
+Python 3.5.3 (default, Sep 27 2018, 17:25:39)
+[GCC 6.3.0 20170516] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> from mitmRelays import *
+>>> mitm = MITM()
+>>> mitm.LED(True)
+>>> mitm.switch_1(True)
+>>> mitm.switch_1(False)
+>>> mitm.switch_2(True)
+>>> mitm.switch_2(False)
+>>> mitm.switch_3(True)
+>>> mitm.switch_3(False)
+>>> mitm.switch_4(True)
+>>> mitm.switch_4(False)
+>>> mitm.switch_5(True)
+>>> mitm.switch_5(False)
+>>> mitm.switch_6(True)
+>>> mitm.switch_6(False)
+>>> mitm.passthrough_all_monitor_j1939()
+>>> mitm.passthrough_all_monitor_can2()
+>>> mitm.mitm_can2()
+>>> mitm.mitm_J1939() 
+```
 #### Autostart can0 and can1
 To bring up both CAN interfaces at boot change `/etc/network/interfaces` with the following commands
 
