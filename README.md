@@ -336,20 +336,22 @@ There is a noticeable delay when starting this program. The output is as follows
 
 
 ## Testing with an SSS2
-Plug in the CAN-in-the-middle to the SSS2 and turn on the keyswitch of the SSS2 (press the knob for 2 seconds).
-Log into the beaglbone and run `candump any` to see a stream of CAN traffic. Both green and red leds should be on.
+Plug in the CAN-in-the-middle to the Smart Sensor Simulator 2 and turn on the keyswitch of the SSS2 (press the knob for 2 seconds).
+Log into the BeagleBone and run `candump any` to see a stream of CAN traffic. Both green and red leds on the SSS2should be on.
 
 Try `cangen can0` to see the green led ficker. Try `cangen can1` to see the red led flicker. 
 
 ### Using CAN Utils as a bridge
+
 `candump -s 2 -B can0 can1&`
+
 `candump -s 2 -B can1 can0&`
+
 will bridge the two networks.
 
 To make this into a service that runs on boot add these two lines to the `/etc/rc.local` file. 
 
-
-Can-utils is installed in `/usr/bin`
+can-utils is installed in `/usr/bin`
 ```
 $ which candump
 /usr/bin/candump
@@ -361,7 +363,3 @@ Interfacing with CAN over Ethernet has been done in this project.
 https://github.com/Heavy-Vehicle-Networking-At-U-Tulsa/TruckCapeProjects/tree/master/SocketCAN
 
 In this project, CAN data is efficiently transferred over TCP for remote interaction.
-
-### Using the Relays for different configurations
-
-With these updates to MITM Rev3 and all MITM Rev 4 boards, the file in ![`/etc/rc.local`](rc.local) will enable the GPIO pins.  
