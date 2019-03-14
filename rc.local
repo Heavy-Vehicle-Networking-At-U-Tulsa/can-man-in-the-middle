@@ -1,63 +1,37 @@
 #!/bin/sh -e
-# Switch 5
-if [ ! -e /sys/class/gpio/gpio70/value ] 
-then
-    echo 70 > /sys/class/gpio/export
-    echo out > /sys/class/gpio/gpio70/direction
-fi
-echo "1" > /sys/class/gpio/gpio70/value
-echo "0" > /sys/class/gpio/gpio70/value
-
-# Switch 6
-if [ ! -e /sys/class/gpio/gpio71/value ] 
-then
-    echo 71 > /sys/class/gpio/export
-    echo out > /sys/class/gpio/gpio71/direction
-fi
-echo "1" > /sys/class/gpio/gpio71/value
-echo "0" > /sys/class/gpio/gpio71/value
-
-# Switch 4
-if [ ! -e /sys/class/gpio/gpio75/value ] 
-then
-    echo 75 > /sys/class/gpio/export
-    echo out > /sys/class/gpio/gpio75/direction
-fi
-echo "1" > /sys/class/gpio/gpio75/value
-echo "0" > /sys/class/gpio/gpio75/value
-
-#Switch 1
-if [ ! -e /sys/class/gpio/gpio76/value ] 
-then
-    echo 76 > /sys/class/gpio/export
-    echo out > /sys/class/gpio/gpio76/direction
-fi
-echo "1" > /sys/class/gpio/gpio76/value
-echo "0" > /sys/class/gpio/gpio76/value
-
-# Switch 2
-if [ ! -e /sys/class/gpio/gpio77/value ] 
-then
-    echo 77 > /sys/class/gpio/export
-    echo out > /sys/class/gpio/gpio77/direction
-fi
-echo "1" > /sys/class/gpio/gpio77/value
-echo "0" > /sys/class/gpio/gpio77/value
-
-# Switch 3
-if [ ! -e /sys/class/gpio/gpio78/value ] 
-then
-    echo 78 > /sys/class/gpio/export
-    echo out > /sys/class/gpio/gpio78/direction
-fi
-echo "1" > /sys/class/gpio/gpio78/value
-echo "0" > /sys/class/gpio/gpio78/value
-
 #LED
-if [ ! -e /sys/class/gpio/gpio79/value ] 
-then
-    echo 79 > /sys/class/gpio/export
-    echo out > /sys/class/gpio/gpio79/direction
-fi
-echo "1" > /sys/class/gpio/gpio79/value
+config-pin P8_38 1
+
+#SWITCH 1
+config-pin P8_39 1
+config-pin P8_39 0
+
+#SWITCH 2
+config-pin P8_40 1
+config-pin P8_40 0
+
+#Switch 4
+config-pin P8_42 1
+config-pin P8_42 0
+
+#Switch 3
+config-pin P8_37 1
+config-pin P8_37 0
+
+#Switch 5
+config-pin P8_45 1
+config-pin P8_45 0
+
+#Switch 6
+config-pin P8_46 1
+config-pin P8_46 0
+
+#CAN1
+config-pin p9.24 can
+config-pin p9.26 can
+
+#CAN0
+config-pin P9_19 can
+config-pin P9_20 can
+
 exit 0
