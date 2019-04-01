@@ -33,4 +33,10 @@ config-pin p9_26 can
 config-pin P9_19 can
 config-pin P9_20 can
 
+#J1708
+config-pin p9_11 uart
+config-pin P9_13 uart
+config-pin P9_21 uart
+config-pin P9_22 uart
+
 exit 0
