@@ -124,7 +124,7 @@ class CanBridge():
 
     def run(self, display=False):
         while True:
-            raw_bytes = self.canSocket_from.recv(128)
+            raw_bytes = self.canSocket_from.recv(16)
             try:
                 self.canSocket_to.send(raw_bytes)
 
@@ -133,7 +133,7 @@ class CanBridge():
                     print("error writing can.")
                 else:
                     pass
-            raw_bytes_from = self.canSocket_to.recv(128)
+            raw_bytes_from = self.canSocket_to.recv(16)
             rawID,DLC,candata = struct.unpack(canformat,raw_bytes_from)
             canID = rawID & 0x1FFFFFFF
             if (rawID & CAN_ERR_FLAG) == CAN_ERR_FLAG:

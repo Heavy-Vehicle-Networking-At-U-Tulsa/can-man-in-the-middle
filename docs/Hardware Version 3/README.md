@@ -10,13 +10,39 @@ In hardware version 3 MITM, there are a few issues to address:
   1. The relays need to be mounted on the bottom of the board to get the correct polarity of voltage across the coil. This has been fixed in MITM rev 4.
   2. The pin going to P8_41 needs to be clipped off the header or removed. This is for switch 3. A jumper wire needs to be routed from pin3 of U2 to P8_37, which is GPIO78.
   3. The LED1 net was not connected. Add a jumper wire from P8_38 (GPIO79) to U2 Pin 7. 
+  4. Relay K2 crosses CAN2 H and L. This is fixed by scratching out the traces and connecting jumper wires to the correct polarity on CAN2HB and CAN2LB.
 
+### Boot Pin Changes
 Clip pin 41 to ensure the BeagleBone Black will boot. A mechanical pencil shows where pin 41 on P8 is that need to be removed. This pin is routed to P8_37 to be used.
 
 ![Clip Pin](Pin41isRemoved.jpg)
 
+### Crossed CAN2 Wires
+The traces near the relay need to be cut and rerouted. Use a razor knife to cut a small chunk from the two traces for CAN2 between relays K1 and K2 on the top side of the board. See photos.
+
+![Cut CAN2H-B](Cut_CAN2H_B.jpg)
+
+![Cut CAN2L-B](Cut_CAN2L_B.jpg)
+
+Connect the CAN2H wire to the post on K2 that says NC closest to the Beagle Bone and route this to CAN2H on the B side.
+
+Connect the CAN2L wire to the post on K2 directly across from the NC connection and is closest to the Molex Connector and route this to CAN2L on the B side. 
+
+The wires may wrap around the board as seen in the photos.
+
+![Topside mount](CutTracesBelowK2.jpg)
+
+![Bottomside mount](Connected_to_CAN2_Bside.jpg)
+
+![Bottom View](Bottom_View_CAN2.jpg)
+
+### Net Labels
+The net for Switch4 (P8_42) is connected to Coil4, but that powers Relay K3. This is for the J1708 circuit.
+
+The net for Switch3 (P8_37) is connected to Coil3 powers Relay K4 (after clipping Pin 41). This is for the DCAN1 circuit. This should default to the on position so DCAN1 does not affect CAN2.
+
 ## Build process
-All parts are through hole parts. A bill of materials in Excel format is included to help acquire the parts. The silkscreen on the PCB is labeled by part number or value, so hand assembly should be pretty straigh forward. Have a look at some of the photos to see the final product.
+All parts are through hole parts. A bill of materials in table format is included to help acquire the parts. The silkscreen on the PCB is labeled by part number or value, so hand assembly should be pretty straight forward. Have a look at some of the photos to see the final product.
 
 
 ### Top View

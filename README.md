@@ -375,6 +375,7 @@ Try `cangen can0` to see the green led ficker. Try `cangen can1` to see the red 
 
 `candump -s 2 -B can0 can1&`
 
+
 `candump -s 2 -B can1 can0&`
 
 will bridge the two networks.

@@ -2,21 +2,20 @@
 #LED
 config-pin P8_38 1
 
-#SWITCH 1
+#Switch 1
 config-pin P8_39 1
 config-pin P8_39 0
 
-#SWITCH 2
+#Switch 2
 config-pin P8_40 1
 config-pin P8_40 0
 
-#Switch 4
+#Switch 3 (K4)
 config-pin P8_42 1
 config-pin P8_42 0
 
-#Switch 3
+#Switch 4 (K3)
 config-pin P8_37 1
-config-pin P8_37 0
 
 #Switch 5
 config-pin P8_45 1
@@ -27,8 +26,8 @@ config-pin P8_46 1
 config-pin P8_46 0
 
 #CAN1
-config-pin p9.24 can
-config-pin p9.26 can
+config-pin p9_24 can
+config-pin p9_26 can
 
 #CAN0
 config-pin P9_19 can
